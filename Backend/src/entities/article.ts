@@ -23,8 +23,8 @@ export class Article {
     @Property()
     bought!: boolean;
 
-    @ManyToOne(() => List)
-    list!: List;
+    @ManyToOne(() => List, { nullable: true })
+    list?: List;
 
     constructor({ name, description, image, amount, bought }: ArticleDTO){
         this.name = name;

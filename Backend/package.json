@@ -18,7 +18,7 @@
     "@types/uuid": "^10.0.0",
     "cors": "^2.8.5",
     "ts-node": "^10.9.2",
-    "ts-watch": "^1.0.8",
+    "tsc-watch": "^6.2.1",
     "typescript": "^5.8.2"
   },
   "dependencies": {
@@ -28,7 +28,8 @@
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "reflect-metadata": "^0.2.2",
-    "uuid": "^11.1.0"
+    "uuid": "^11.1.0",
+    "yup": "^1.6.1"
   },
   "mikro-orm": {
     "useTsNode": true,

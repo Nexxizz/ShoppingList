@@ -24,8 +24,8 @@ export class List {
     @Property({ nullable: true })
     favorite: boolean = false;
 
-    @OneToMany(() => Article, (e) => e.lists)
-    trips = new Collection<Article>(this);
+    @OneToMany(() => Article, article => article.list)
+    articles = new Collection<Article>(this);
 
     constructor({ name, description, create_date, update_date, favorite}: ListDTO){
         this.name = name;
@@ -43,5 +43,5 @@ export type ListDTO = {
     create_date: Date;
     update_date: Date;
     favorite: boolean;
-    trips: ArticleDTO[];
+    articles?: ArticleDTO[];
 };

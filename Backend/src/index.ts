@@ -5,6 +5,8 @@ import { Article } from './entities/article';
 import { List } from './entities/list';
 import http from "http";
 import cors from 'cors';
+import { articleRouter} from "./controller/article.controller";
+import { listRouter } from "./controller/list.controller";
 
 const app = express();
 app.use(cors());
@@ -30,8 +32,8 @@ const initializeServer = async () => {
     DI.articleRepository = em.getRepository(Article);
     DI.listRepository = em.getRepository(List);
 
-    // app.use('/trips', tripRouter);
-    // app.use('/destinations', destinationRouter);
+    app.use('/articles', articleRouter);
+    app.use('/lists', listRouter);
 
 
     app.listen(PORT, () => {
