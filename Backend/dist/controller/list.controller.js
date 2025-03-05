@@ -4,6 +4,7 @@ exports.listRouter = void 0;
 const express_1 = require("express");
 const __1 = require("../");
 const list_1 = require("../entities/list");
+const article_1 = require("../entities/article");
 const list_schema_1 = require("../schemas/list.schema");
 class ListController {
     constructor() {
@@ -18,6 +19,19 @@ class ListController {
         };
         this.updateListHandler = (req, res) => {
             this.updateList(req, res);
+        };
+        this.showArticleInListHandler = (req, res) => {
+            this.showArticleInList(req, res);
+        };
+        this.showArticleInList = async (req, res) => {
+            const em = __1.DI.orm.em.fork();
+            try {
+                const articlesInList = await em.find(article_1.Article, { list: req.params.listId }, { populate: ["list"] });
+                res.status(200).json(articlesInList);
+            }
+            catch (err) {
+                res.status(400).send(err);
+            }
         };
         this.updateList = async (req, res) => {
             const em = __1.DI.orm.em.fork();
@@ -88,6 +102,7 @@ class ListController {
         this.router.get('/getLists', this.getAllListsHandler);
         this.router.delete('/deleteList/:id', this.deleteListHandler);
         this.router.put('/updateList/:id', this.updateListHandler);
+        this.router.get('/showArticleInList/:listId', this.showArticleInListHandler);
     }
 }
 const listController = new ListController();

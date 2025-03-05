@@ -1,6 +1,7 @@
 import {Request, Response, Router} from 'express';
 import { DI } from '../';
 import { List } from '../entities/list';
+import { Article } from '../entities/article';
 import { ListSchema} from "../schemas/list.schema";
 
 class ListController {
@@ -12,6 +13,7 @@ class ListController {
         this.router.get('/getLists', this.getAllListsHandler);
         this.router.delete('/deleteList/:id', this.deleteListHandler);
         this.router.put('/updateList/:id', this.updateListHandler);
+        this.router.get('/showArticleInList/:listId', this.showArticleInListHandler)
     }
 
     private createListHandler = (req: Request, res: Response): void => {
@@ -29,6 +31,21 @@ class ListController {
     private updateListHandler = (req: Request, res: Response): void => {
         this.updateList(req, res);
     };
+
+    private showArticleInListHandler = (req: Request, res: Response): void => {
+        this.showArticleInList(req, res);
+    };
+
+    showArticleInList= async (req: Request, res: Response): Promise<void> => {
+        const em = DI.orm.em.fork();
+        try {
+            const articlesInList = await em.find(Article, {list: req.params.listId}, {populate: ["list"]});
+            res.status(200).json(articlesInList);
+
+        } catch (err) {
+            res.status(400).send(err);
+        }
+    }
 
     updateList= async (req: Request, res: Response): Promise<void> => {
         const em = DI.orm.em.fork();
