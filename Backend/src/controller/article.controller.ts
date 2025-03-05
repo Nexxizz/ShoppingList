@@ -9,16 +9,28 @@ class ArticleController {
     constructor() {
         this.router = Router({ mergeParams: true });
 
-        // Register routes with alternative syntax
         this.router.post('/createArticle', this.createArticleHandler);
+        this.router.get('/getArticles', this.getAllArticlesHandler);
     }
 
-    // Use a different name for the handler to avoid confusion
     private createArticleHandler = (req: Request, res: Response): void => {
         this.createArticle(req, res);
     };
 
-    // Keep your original implementation
+    private getAllArticlesHandler = (req: Request, res: Response): void => {
+        this.getAllArticles(req, res);
+    };
+
+    getAllArticles = async (req: Request, res: Response) => {
+        const em = DI.orm.em.fork();
+        try {
+            const articles = await em.findAll(Article);
+            res.status(200).send(articles);
+        } catch (err) {
+            res.status(500).send(err);
+        }
+    }
+
     createArticle = async (req: Request, res: Response) => {
         const em = DI.orm.em.fork();
         try {
@@ -27,12 +39,10 @@ class ArticleController {
             await em.persistAndFlush(article);
             res.status(201).json(article);
         } catch (error: any) {
-            console.log("Validation error:", error);
             return res.status(400).json({ error: error.errors || error.message || 'Unknown error' });
         }
     };
 }
 
-// Create an instance and export the router
 const articleController = new ArticleController();
 export const articleRouter = articleController.router;

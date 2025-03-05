@@ -7,11 +7,22 @@ const article_1 = require("../entities/article");
 const article_schema_1 = require("../schemas/article.schema");
 class ArticleController {
     constructor() {
-        // Use a different name for the handler to avoid confusion
         this.createArticleHandler = (req, res) => {
             this.createArticle(req, res);
         };
-        // Keep your original implementation
+        this.getAllArticlesHandler = (req, res) => {
+            this.getAllArticles(req, res);
+        };
+        this.getAllArticles = async (req, res) => {
+            const em = __1.DI.orm.em.fork();
+            try {
+                const articles = await em.findAll(article_1.Article);
+                res.status(200).send(articles);
+            }
+            catch (err) {
+                res.status(500).send(err);
+            }
+        };
         this.createArticle = async (req, res) => {
             const em = __1.DI.orm.em.fork();
             try {
@@ -21,15 +32,13 @@ class ArticleController {
                 res.status(201).json(article);
             }
             catch (error) {
-                console.log("Validation error:", error);
                 return res.status(400).json({ error: error.errors || error.message || 'Unknown error' });
             }
         };
         this.router = (0, express_1.Router)({ mergeParams: true });
-        // Register routes with alternative syntax
         this.router.post('/createArticle', this.createArticleHandler);
+        this.router.get('/getArticles', this.getAllArticlesHandler);
     }
 }
-// Create an instance and export the router
 const articleController = new ArticleController();
 exports.articleRouter = articleController.router;
