@@ -4,7 +4,6 @@ exports.listRouter = void 0;
 const express_1 = require("express");
 const __1 = require("../");
 const list_1 = require("../entities/list");
-const article_1 = require("../entities/article");
 const list_schema_1 = require("../schemas/list.schema");
 class ListController {
     constructor() {
@@ -26,8 +25,8 @@ class ListController {
         this.showArticleInList = async (req, res) => {
             const em = __1.DI.orm.em.fork();
             try {
-                const articlesInList = await em.find(article_1.Article, { list: req.params.listId }, { populate: ["list"] });
-                res.status(200).json(articlesInList);
+                const listWithArticles = await em.findOne(list_1.List, req.params.listId, { populate: ["articles"] });
+                res.status(200).json(listWithArticles);
             }
             catch (err) {
                 res.status(400).send(err);

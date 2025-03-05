@@ -39,9 +39,8 @@ class ListController {
     showArticleInList= async (req: Request, res: Response): Promise<void> => {
         const em = DI.orm.em.fork();
         try {
-            const articlesInList = await em.find(Article, {list: req.params.listId}, {populate: ["list"]});
-            res.status(200).json(articlesInList);
-
+            const listWithArticles = await em.findOne(List, req.params.listId, { populate: ["articles"] });
+            res.status(200).json(listWithArticles);
         } catch (err) {
             res.status(400).send(err);
         }
