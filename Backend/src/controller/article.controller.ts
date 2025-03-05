@@ -2,6 +2,8 @@ import { Router, Request, Response } from 'express';
 import { DI } from '../';
 import { Article } from '../entities/article';
 import { ArticleSchema} from "../schemas/article.schema";
+import { List } from '../entities/list';
+
 
 class ArticleController {
     router: Router;
@@ -12,6 +14,7 @@ class ArticleController {
         this.router.get('/getArticles', this.getAllArticlesHandler);
         this.router.delete('/deleteArticle/:id', this.deleteArticleHandler);
         this.router.put('/updateArticle/:id', this.updateArticleHandler);
+        this.router.put('/addArticleToList/:listId/:articleId', this.addArticleToListHandler);
     }
 
     private createArticleHandler = (req: Request, res: Response): void => {
@@ -29,6 +32,33 @@ class ArticleController {
     private updateArticleHandler = (req: Request, res: Response): void => {
         this.updateArticle(req, res);
     };
+
+    private addArticleToListHandler = (req: Request, res: Response): void => {
+        this.addArticleToList(req, res);
+    };
+
+    addArticleToList= async (req: Request, res: Response): Promise<void> => {
+        const em = DI.orm.em.fork();
+        try {
+            const article = await em.findOne(Article, { id: req.params.articleId });
+            if (!article) {
+                res.status(404).json({ error: 'Article not found'});
+                return;
+            }
+
+            const list = await em.findOne(List, { id: req.params.listId });
+            if (!list) {
+                res.status(404).json({ error: 'List not found'});
+                return;
+            }
+
+            article.list = list;
+            await em.persistAndFlush(article);
+            res.status(200).json(article);
+        } catch (err) {
+            res.status(400).send(err);
+        }
+    }
 
     updateArticle= async (req: Request, res: Response): Promise<void> => {
         const em = DI.orm.em.fork();
