@@ -16,6 +16,26 @@ class ArticleController {
         this.deleteArticleHandler = (req, res) => {
             this.deleteArticle(req, res);
         };
+        this.updateArticleHandler = (req, res) => {
+            this.updateArticle(req, res);
+        };
+        this.updateArticle = async (req, res) => {
+            const em = __1.DI.orm.em.fork();
+            try {
+                await article_schema_1.ArticleSchema.validate(req.body);
+                const article = await em.findOne(article_1.Article, { id: req.params.id });
+                if (!article) {
+                    res.status(404).json({ error: 'Article not found' });
+                    return;
+                }
+                em.assign(article, req.body);
+                await em.persistAndFlush(article);
+                res.status(200).json(article);
+            }
+            catch (err) {
+                res.status(400).send(err);
+            }
+        };
         this.deleteArticle = async (req, res) => {
             const em = __1.DI.orm.em.fork();
             try {
@@ -57,6 +77,7 @@ class ArticleController {
         this.router.post('/createArticle', this.createArticleHandler);
         this.router.get('/getArticles', this.getAllArticlesHandler);
         this.router.delete('/deleteArticle/:id', this.deleteArticleHandler);
+        this.router.put('/updateArticle/:id', this.updateArticleHandler);
     }
 }
 const articleController = new ArticleController();

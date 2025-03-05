@@ -8,10 +8,10 @@ class ArticleController {
 
     constructor() {
         this.router = Router({ mergeParams: true });
-
         this.router.post('/createArticle', this.createArticleHandler);
         this.router.get('/getArticles', this.getAllArticlesHandler);
         this.router.delete('/deleteArticle/:id', this.deleteArticleHandler);
+        this.router.put('/updateArticle/:id', this.updateArticleHandler);
     }
 
     private createArticleHandler = (req: Request, res: Response): void => {
@@ -25,6 +25,27 @@ class ArticleController {
     private deleteArticleHandler = (req: Request, res: Response): void => {
         this.deleteArticle(req, res);
     };
+
+    private updateArticleHandler = (req: Request, res: Response): void => {
+        this.updateArticle(req, res);
+    };
+
+    updateArticle= async (req: Request, res: Response): Promise<void> => {
+        const em = DI.orm.em.fork();
+        try {
+            await ArticleSchema.validate(req.body);
+            const article = await em.findOne(Article, { id: req.params.id });
+            if (!article) {
+                res.status(404).json({ error: 'Article not found'});
+                return;
+            }
+            em.assign(article, req.body);
+            await em.persistAndFlush(article);
+            res.status(200).json(article);
+        } catch (err) {
+            res.status(400).send(err);
+        }
+    }
 
     deleteArticle= async (req: Request, res: Response): Promise<void> => {
         const em = DI.orm.em.fork();
