@@ -11,6 +11,7 @@ class ArticleController {
 
         this.router.post('/createArticle', this.createArticleHandler);
         this.router.get('/getArticles', this.getAllArticlesHandler);
+        this.router.delete('/deleteArticle/:id', this.deleteArticleHandler);
     }
 
     private createArticleHandler = (req: Request, res: Response): void => {
@@ -20,6 +21,26 @@ class ArticleController {
     private getAllArticlesHandler = (req: Request, res: Response): void => {
         this.getAllArticles(req, res);
     };
+
+    private deleteArticleHandler = (req: Request, res: Response): void => {
+        this.deleteArticle(req, res);
+    };
+
+    deleteArticle= async (req: Request, res: Response): Promise<void> => {
+        const em = DI.orm.em.fork();
+        try{
+            const article  = await em.findOne(Article, { id: req.params.id });
+            if (!article) {
+                res.status(404).json({ error: 'Article not found' });
+                return;
+            }
+            await em.removeAndFlush(article);
+            res.status(200).json(article);
+        } catch (err) {
+            res.status(400).send(err);
+        }
+
+    }
 
     getAllArticles = async (req: Request, res: Response) => {
         const em = DI.orm.em.fork();
