@@ -2,8 +2,8 @@ import * as Yup from 'yup';
 export declare const ListSchema: Yup.ObjectSchema<{
     name: string;
     description: string;
-    create_date: Date;
-    update_date: Date;
+    create_date: Date | undefined;
+    update_date: Date | undefined;
     favorite: boolean | undefined;
     articles: {
         image?: string | undefined;

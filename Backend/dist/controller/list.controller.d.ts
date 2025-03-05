@@ -1,1 +1,2 @@
-export declare const listRouter: import("express-serve-static-core").Router;
+import { Router } from 'express';
+export declare const listRouter: Router;

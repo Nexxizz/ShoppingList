@@ -39,8 +39,8 @@ const article_schema_1 = require("./article.schema");
 exports.ListSchema = Yup.object().shape({
     name: Yup.string().required(),
     description: Yup.string().required(),
-    create_date: Yup.date().required(),
-    update_date: Yup.date().required(),
+    create_date: Yup.date(),
+    update_date: Yup.date(),
     favorite: Yup.boolean(),
     articles: Yup.array().of(article_schema_1.ArticleSchema)
 });
