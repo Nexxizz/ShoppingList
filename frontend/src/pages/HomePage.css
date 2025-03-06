@@ -1,0 +1,14 @@
+.home-container {
+    padding: 20px;
+    background-color: lightblue;
+    margin: 20px;
+}
+
+.home-headline {
+    color: black;
+    font-size: 30px;
+}
+
+.home-paragraph {
+    /* Hier kannst du weitere Styles hinzufügen */
+}

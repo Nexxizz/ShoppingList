@@ -1,0 +1,11 @@
+.navigation {
+    background: lightgreen;
+    padding: 15px;
+    display: flex;
+    justify-content: center;
+}
+
+.nav-link {
+    font-size: 28px;
+    text-decoration: none;
+}

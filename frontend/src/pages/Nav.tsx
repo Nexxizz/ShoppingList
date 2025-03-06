@@ -1,14 +1,12 @@
 import { Link } from "react-router-dom";
-
+import "./Nav.css";
 
 export const Navigation = () => {
     return (
-        <nav style={{background: "lightgreen", padding: "15px", display: "flex", justifyContent: "center"}}>
-            <Link to="/home" style={{fontSize: "28px", textDecoration: "none"}}>
+        <nav className="navigation">
+            <Link to="/home" className="nav-link">
                 Home
             </Link>
         </nav>
     )
 }
-
-

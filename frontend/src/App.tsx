@@ -10,17 +10,3 @@ export const App = () => {
         </BrowserRouter>
   )
 }
-
-
-// export const App = () => {
-//     return (
-//         <ErrorBoundary>
-//             <ChakraProvider>
-//                 <BrowserRouter>
-//                     <Navigation />
-//                     <AppRoutes />
-//                 </BrowserRouter>
-//             </ChakraProvider>
-//         </ErrorBoundary>
-//     )
-// }
