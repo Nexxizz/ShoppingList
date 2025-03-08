@@ -7,6 +7,9 @@ export const Navigation = () => {
             <Link to="/home" className="nav-link">
                 Home
             </Link>
+            <Link to="/create-list" className="nav-link">
+                Create List
+            </Link>
         </nav>
     )
 }

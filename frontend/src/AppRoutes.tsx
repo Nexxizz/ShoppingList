@@ -1,5 +1,7 @@
 import { RouteProps, Navigate, Routes, Route } from 'react-router-dom';
 import { HomePage } from './pages/HomePage.tsx';
+import { CreateListPage } from './pages/CreateListPage.tsx';
+
 
 export type RouteConfig = RouteProps & {
 
@@ -16,7 +18,10 @@ export const routes: RouteConfig[] = [
         path: "/home",
         element: <HomePage />,
     },
-
+    {
+        path: "/create-list",
+        element: <CreateListPage />,
+    },
 ];
 
 const renderRouteMap = (route: RouteConfig) => {
