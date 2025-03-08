@@ -2,8 +2,7 @@ import { RouteProps, Navigate, Routes, Route } from 'react-router-dom';
 import { HomePage } from './pages/HomePage.tsx';
 
 export type RouteConfig = RouteProps & {
-    /**
-     * Required route path.   * E.g. /home   */
+
     path: string;
 };
 
@@ -17,14 +16,7 @@ export const routes: RouteConfig[] = [
         path: "/home",
         element: <HomePage />,
     },
-    // {
-    //     path: "/addTrip",
-    //     element: <AddTrip />,
-    // },
-    // {
-    //     path: "/addDestination",
-    //     element: <AddDestination />,
-    // },
+
 ];
 
 const renderRouteMap = (route: RouteConfig) => {

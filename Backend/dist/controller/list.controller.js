@@ -22,6 +22,19 @@ class ListController {
         this.showArticleInListHandler = (req, res) => {
             this.showArticleInList(req, res);
         };
+        this.showAllListsWithArticleHandler = (req, res) => {
+            this.showAllListsWithArticle(req, res);
+        };
+        this.showAllListsWithArticle = async (req, res) => {
+            const em = __1.DI.orm.em.fork();
+            try {
+                const listsWithArticles = await em.find(list_1.List, {}, { populate: ["articles"] });
+                res.status(200).json(listsWithArticles);
+            }
+            catch (err) {
+                res.status(400).send(err);
+            }
+        };
         this.showArticleInList = async (req, res) => {
             const em = __1.DI.orm.em.fork();
             try {
@@ -102,6 +115,7 @@ class ListController {
         this.router.delete('/deleteList/:id', this.deleteListHandler);
         this.router.put('/updateList/:id', this.updateListHandler);
         this.router.get('/showArticleInList/:listId', this.showArticleInListHandler);
+        this.router.get('/showAllListsWithArticle', this.showAllListsWithArticleHandler);
     }
 }
 const listController = new ListController();

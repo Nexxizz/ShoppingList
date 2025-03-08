@@ -13,7 +13,8 @@ class ListController {
         this.router.get('/getLists', this.getAllListsHandler);
         this.router.delete('/deleteList/:id', this.deleteListHandler);
         this.router.put('/updateList/:id', this.updateListHandler);
-        this.router.get('/showArticleInList/:listId', this.showArticleInListHandler)
+        this.router.get('/showArticleInList/:listId', this.showArticleInListHandler);
+        this.router.get('/showAllListsWithArticle', this.showAllListsWithArticleHandler);
     }
 
     private createListHandler = (req: Request, res: Response): void => {
@@ -35,6 +36,20 @@ class ListController {
     private showArticleInListHandler = (req: Request, res: Response): void => {
         this.showArticleInList(req, res);
     };
+
+    private showAllListsWithArticleHandler = (req: Request, res: Response): void => {
+        this.showAllListsWithArticle(req, res);
+    };
+
+    showAllListsWithArticle= async (req: Request, res: Response): Promise<void> => {
+        const em = DI.orm.em.fork();
+        try {
+            const listsWithArticles = await em.find(List, {},  { populate: ["articles"] });
+            res.status(200).json(listsWithArticles);
+        } catch (err) {
+            res.status(400).send(err);
+        }
+    }
 
     showArticleInList= async (req: Request, res: Response): Promise<void> => {
         const em = DI.orm.em.fork();
